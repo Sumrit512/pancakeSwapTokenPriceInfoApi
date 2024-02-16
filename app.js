@@ -137,8 +137,8 @@ return numberAbs + numberDecimals;
 app.get('/priceInfo', async (req, res) => {
  try{
   
-    let pancakeSwapContract = '0x10ED43C718714eb63d5aA57B78B54704E256024E'.toLowerCase();
-    let url = "https://bsc-dataseed1.binance.org"
+    let pancakeSwapContract = '0x10ED43C718714eb63d5aA57B78B54704E256024E'
+    let url = "https://rpc.ankr.com/bsc/b71b17f5ec6d40268436c98d4d20afecdcaa300c05360d40e9c919a8f871f404"
     let address = req.query.address;
     let amount = req.query.amount;
     const web3 = await new Web3(url)
@@ -152,10 +152,12 @@ app.get('/priceInfo', async (req, res) => {
         try{
 
              router = await new web3.eth.Contract(pancakeSwapAbi, pancakeSwapContract);
+             
             amountOut = await router.methods.getAmountsOut(bnbToSell, [BNBTokenAddress, USDTokenAddress]).call();
            
             amountOut = await web3.utils.fromWei(amountOut[1])
             console.log(amountOut[1])
+            
             bnbPriceInUsd = amountOut
         } catch(e) {
             // if(!amountOut) return 0;
@@ -180,10 +182,10 @@ app.get('/priceInfo', async (req, res) => {
     
                 try{
                     let router = await new web3.eth.Contract( pancakeSwapAbi, pancakeSwapContract);
-                    amountOutToken = await router.methods.getAmountsOut(tokensToSell, [tokenAddress, BNBTokenAddress]).call();
-                    console.log(amountOutToken)
+                    amountOutToken = await router.methods.getAmountsOut(tokensToSell, [tokenAddress, USDTokenAddress]).call();
+                    console.log("it's here",amountOutToken)
                     amountOutToken = await web3.utils.fromWei(amountOutToken[1]);
-                    amountOutTokenInUsd = amountOutToken*bnbPriceInUsd;
+                    amountOutTokenInUsd = amountOutToken;
                     console.log(bnbPriceInUsd)
                     console.log(amountOutTokenInUsd)
                 } catch(e){
@@ -204,6 +206,6 @@ app.get('/priceInfo', async (req, res) => {
 
 
 
-app.listen(3005, () => {
+app.listen(3007, () => {
     console.log(`server is listening to port 3005`)
 })
