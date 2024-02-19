@@ -196,8 +196,9 @@ app.get('/priceInfo', async (req, res) => {
                 //     return amountOut;
                     
             }
+            const sendingData = amountOutTokenInUsd.substring(0,4)
 
-    return res.json(amountOutTokenInUsd).status(200).end()
+    return res.json(sendingData).status(200).end()
     }   catch(e){
     console.log(e)
     return res.status(500).end()
